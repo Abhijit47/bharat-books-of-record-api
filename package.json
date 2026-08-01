@@ -14,10 +14,11 @@
     "db:reset": "npx prisma migrate reset",
     "db:dev": "npm db:push && pnpm db:generate",
     "db:studio": "npx prisma studio --browser none",
-    "auth:gen":"npx @better-auth/cli@latest generate --config ./better-auth.config.ts --output ./src/lib/auth-schema.prisma --yes"
+    "auth:gen": "npx @better-auth/cli@latest generate --config ./better-auth.config.ts --output ./src/lib/auth-schema.prisma --yes"
   },
   "dependencies": {
     "@better-auth/prisma-adapter": "^1.6.25",
+    "@hono/zod-validator": "^0.9.0",
     "@neondatabase/serverless": "^1.1.0",
     "@prisma/adapter-neon": "^7.9.1",
     "@prisma/adapter-pg": "^7.9.1",

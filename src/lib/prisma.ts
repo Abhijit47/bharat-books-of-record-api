@@ -35,10 +35,6 @@ export const prisma = new Proxy({} as PrismaClient, {
 });
 
 function withPrisma(c: Context, next: Next) {
-  const env = c.env as any;
-  if (env && env.DATABASE_URL) {
-    process.env.DATABASE_URL = env.DATABASE_URL;
-  }
   if (!c.get("prisma")) {
     c.set("prisma", prisma);
   }
