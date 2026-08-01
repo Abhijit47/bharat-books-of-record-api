@@ -15,9 +15,10 @@ import {
   UploadApiOptions,
 } from "cloudinary";
 
-import client from "./configs/cloudinary";
+import { getCldClient } from "./configs/cloudinary";
 
 type RouteCtx = {
+  Bindings: CloudflareBindings;
   Variables: {
     prisma: PrismaClient;
   } & AuthCtx["Variables"];
@@ -271,6 +272,8 @@ protectedApp.post("/upload-cover", withPrisma, async (c) => {
       filename_override: fileName,
       upload_preset: "upload-cover",
     };
+
+    const client = getCldClient(c.env);
 
     const uploaderResult: UploadResponse = await new Promise(
       (resolve, reject) => {
