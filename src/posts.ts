@@ -16,6 +16,7 @@ import {
 } from "cloudinary";
 
 import { getCldClient } from "./configs/cloudinary";
+import { auth } from "./lib/better-auth";
 
 type RouteCtx = {
   Bindings: CloudflareBindings;
@@ -43,6 +44,22 @@ app.get("/all", withPrisma, async (c) => {
 });
 
 const protectedApp = new Hono<RouteCtx>();
+
+protectedApp.use(async (c, next) => {
+  const session = await auth(c.env).api.getSession({
+    headers: c.req.raw.headers,
+  });
+
+  if (session) {
+    c.set("user", session.user);
+    c.set("session", session.session);
+  } else {
+    c.set("user", null);
+    c.set("session", null);
+  }
+  await next();
+});
+
 protectedApp.use(authorizationMiddleware);
 
 // POST /new - Create a new post

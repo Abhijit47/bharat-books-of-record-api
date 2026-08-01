@@ -42,29 +42,6 @@ app.get("/message", (c) => {
   return c.text(`Hello Hono! ${c.env.PORT}`);
 });
 
-app.use("/posts/*", async (c, next) => {
-  const session = await auth(c.env).api.getSession({
-    headers: c.req.raw.headers,
-  });
-
-  if (!session) {
-    c.set("user", null);
-    c.set("session", null);
-    await next();
-    return c.json(
-      {
-        status: "error",
-        message: "Unauthorized",
-      },
-      401,
-    );
-  }
-
-  c.set("user", session.user);
-  c.set("session", session.session);
-  await next();
-});
-
 app.on(["GET", "POST"], "/api/*", (c) => {
   return auth(c.env).handler(c.req.raw);
 });
