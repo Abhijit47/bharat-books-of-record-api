@@ -7,6 +7,9 @@ import { Role } from "../../generated/prisma/client/enums";
 // import { CloudflareBindings } from "../..";
 
 export const auth = (env: CloudflareBindings) => {
+  if (env.DATABASE_URL) {
+    process.env.DATABASE_URL = env.DATABASE_URL;
+  }
   const isDev = env.NODE_ENV === "development" || false;
   const BASE_URL = env.BETTER_AUTH_URL;
   const ADMIN_WEBSITE_URL = env.ADMIN_WEBSITE_URL;
@@ -14,6 +17,7 @@ export const auth = (env: CloudflareBindings) => {
 
   return betterAuth({
     baseURL: BASE_URL,
+    secret: env.BETTER_AUTH_SECRET,
 
     advanced: {
       database: {
